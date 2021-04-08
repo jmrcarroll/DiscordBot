@@ -5,6 +5,16 @@ const { resourceLimits } = require('worker_threads');
 const client = new discord.Client();
 const config = require('./config.json')
 const prefix = config.prefix
+const fs = require('fs');
+client.commands = new discord.Collection();
+
+const cmdFiles = fs.readdirSync('./commands').filter(file => file.endsWith('.js'));
+
+for(file of cmdFiles){
+    const command = require('./commands/'+file)
+    client.commands.set(command.name, command)
+}
+
 dotenv.config()
 //console.log(process.env.token);
 console.log("||UNNAMED BOT STARTING||");
@@ -24,27 +34,15 @@ client.on('message', message=>{
     if (message.content.startsWith(prefix) && !message.author.bot){
         args = message.content.slice(prefix.length).trim().split(/ +/);
         cmd = args.shift().toLowerCase()
-        if (message.channel.type == "text"){
-            switch(cmd.toLowerCase()){
-    
-                case "ping": message.channel.send("Pong"); break;
-                case "server": message.channel.send(message.guild.name); break;
-                case "channel": message.channel.send("#" + message.channel.name); break;
-                case "me": message.author.send("Name: "+ message.author.username + "\nID:" + message.author.id + "\n"+ message.author.displayAvatarURL()); break;
-                case "insult": message.reply("You're a cunt!!"); break;
-                case "avatar": message.reply(avatar(message)); break;
-                default: message.channel.send("Unknown command: " + cmd); break;
-            }
-        }else if(message.channel.type == "dm"){
-            cmd = message.content.substr((prefix.length));
-            switch(cmd.toLowerCase()){
-    
-                case "ping": message.channel.send("Pong"); break;
-                case "me": message.author.send("Name: "+ message.author.username + "\nID:" + message.author.id + "\n"+ message.author.displayAvatarURL()); break;
-                case "insult": message.reply("You're a cunt!!"); break;
-                case "avatar": message.reply(avatar(message)); break;
-                default: message.channel.send("Unknown command: " + cmd); break;
-            }
+        if (!client.commands.has(cmd)){
+            message.reply("No command: " + cmd);
+            return;
+        }
+
+        try{
+            client.commands.get(cmd).execute(message,args);
+        }catch(error){
+            message.reply("Unable to execute command")
         }
 
     }
