@@ -13,8 +13,8 @@ client.once('ready', ()=>{
 client.on('message', message=>{
     console.log(message.author.username + " in " + message.guild.name+" #"+ message.channel.name + ":\t" + message.content)
     if (message.content == "!ping" && !message.author.bot){
-        message.react("😂")
-        message.channel.send("!ping")
+        message.react("😂");
+        message.channel.send("!ping");
     }
 });
 client.login(process.env.token);
