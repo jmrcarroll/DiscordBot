@@ -3,7 +3,6 @@ module.exports = {
     description:"Returns Server name",
     syntax:"!server",
     execute(message, args){
-        if(message.t)
         if(message.channel.type != "dm"){
             message.channel.send("Server Name: " + message.guild.name);
         } else{
