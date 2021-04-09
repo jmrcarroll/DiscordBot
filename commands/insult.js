@@ -1,6 +1,7 @@
 module.exports = {
     name:"insult",
     description:"Returns avatar pf requested user",
+    syntax:"!insult {*optional* Mention user}",
     execute(message, args){
         console.log(message.mentions)
 

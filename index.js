@@ -22,6 +22,7 @@ console.log("||UNNAMED BOT STARTING||");
 
 client.once('ready', ()=>{
     console.log('UNNAMED BOT READY! BEEP BOOP MOTHERFUCKERS!!');
+    console.log(client.commands)
 });
 
 client.on('message', message=>{
@@ -34,26 +35,22 @@ client.on('message', message=>{
     if (message.content.startsWith(prefix) && !message.author.bot){
         args = message.content.slice(prefix.length).trim().split(/ +/);
         cmd = args.shift().toLowerCase()
-        if (!client.commands.has(cmd)){
+        if (!client.commands.has(cmd) && cmd != "help"){
             message.reply("No command: " + cmd);
             return;
+        } else if (cmd == "help"){
+            message.author.send(`**help**\n__Description__:\nLists commands available on the bot\n__Syntax__:\n!help`);
+            client.commands.map(command =>{
+                message.author.send(`**${command.name}**\n__Description__:\n${command.description}\n__Syntax__:\n${command.syntax}`);
+            });
+            
+        }else{
+            try{
+                client.commands.get(cmd).execute(message,args);
+            }catch(error){
+                message.reply("Unable to execute command")
+            }
         }
-
-        try{
-            client.commands.get(cmd).execute(message,args);
-        }catch(error){
-            message.reply("Unable to execute command")
-        }
-
     }
 });
 client.login(process.env.token);
-
-function avatar(message){
-    result =message.mentions.users.map(user=>{
-        return user.username + " Avatar: " + user.displayAvatarURL({format: "png",dynamic: true}) +"\n"
-    })
-    
-
-    return result;
-}

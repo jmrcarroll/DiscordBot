@@ -2,7 +2,7 @@
 module.exports = {
     name:"roll",
     description:"Rolls the specified number of the specified sided dice",
-    syntax:"!roll {Number of dice}d{Number of Sides} {Modifier(Positive, negitive or Zero)} {*optional*: Descriptor}",
+    syntax:"!roll {*Optional:*{Number of dice}d{Number of Sides}} {*Optional:* Modifier(Positive, negitive or Zero)} {*optional*: Descriptor}",
     execute(message, args){
         console.log(args.length);
         if(args.length < 1){
