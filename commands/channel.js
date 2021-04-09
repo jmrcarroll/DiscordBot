@@ -1,6 +1,7 @@
 module.exports = {
     name:"channel",
     description:"Returns Channel Name",
+    syntax:"!channel",
     execute(message, args){
         
         if(message.channel.type != "dm"){

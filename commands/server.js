@@ -1,6 +1,7 @@
 module.exports = {
     name:"server",
     description:"Returns Server name",
+    syntax:"!server",
     execute(message, args){
         if(message.t)
         if(message.channel.type != "dm"){
