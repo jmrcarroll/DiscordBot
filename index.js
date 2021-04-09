@@ -39,10 +39,16 @@ client.on('message', message=>{
             message.reply("No command: " + cmd);
             return;
         } else if (cmd == "help"){
-            message.author.send(`**help**\n__Description__:\nLists commands available on the bot\n__Syntax__:\n!help`);
             client.commands.map(command =>{
-                message.author.send(`**${command.name}**\n__Description__:\n${command.description}\n__Syntax__:\n${command.syntax}`);
+                resposneMess = new discord.MessageEmbed()
+                .setTitle(command.name)
+                .setAuthor(client.user.username, client.user.displayAvatarURL())
+                .setDescription(`__Description__:\n${command.description}\n\n`)
+                .setColor(0x4400fe)
+                .addFields({name:'Syntax', value: command.syntax})
+            message.author.send(resposneMess)
             });
+
             
         }else{
             try{
